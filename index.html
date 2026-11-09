@@ -76,9 +76,8 @@ h1 span{display:block;color:var(--faint)}
 .invite{display:grid;gap:8px;justify-self:end;width:min(100%,300px)}
 .node-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
 .invite img{display:block;width:100%;height:auto;aspect-ratio:1200/1489;border-radius:14px;border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(224,154,143,.35)}
-/* the keepsake film, a video node under the invite (same column, same frame) */
+/* the keepsake film, a video node in the invite's place (James, 2026-11-09: the invite image removed; the film opens on it) */
 .nodes{display:grid;gap:22px;justify-self:end;width:min(100%,300px)}
-.nodes .invite{width:100%}
 .film{display:grid;gap:8px}
 .film .node-head{white-space:nowrap}
 .film video{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:14px;border:1px solid var(--line);background:var(--node);box-shadow:0 30px 70px -30px rgba(138,139,179,.35);cursor:pointer}
@@ -210,10 +209,6 @@ a.seg:hover b{text-decoration:underline;text-underline-offset:3px}
       <p class="lede">A private yacht evening hosted by <b>FLORA</b>, out of Miami Beach Marina from 5:00 to 7:30 pm. Every photo from the night lives here, in the order the light changed.</p>
     </div>
     <div class="nodes invite-hero">
-      <figure class="invite" style="margin:0">
-        <div class="node-head"><span>Image · The invite</span><span>4:5</span></div>
-        <img src="flyer.jpg" alt="The invitation: a white yacht crossing Biscayne Bay at sunset with the Miami skyline behind, titled Sunset at Sea" width="1200" height="1489">
-      </figure>
       <figure class="film" style="margin:0">
         <div class="node-head"><span>Film · The keepsake</span><button class="film-play" type="button" aria-label="Play the film full screen with sound">Sound on</button></div>
         <video src="keepsake.mp4" poster="keepsake-poster.jpg" width="1080" height="1350" muted loop playsinline preload="none" aria-label="The keepsake film, 15 seconds: from the invite to the yacht keepsake guests took home. Designed in FLORA."></video>
@@ -266,10 +261,6 @@ a.seg:hover b{text-decoration:underline;text-underline-offset:3px}
   </section>
 
   <div class="nodes invite-foot">
-    <figure class="invite" style="margin:0">
-      <div class="node-head"><span>Image · The invite</span><span>4:5</span></div>
-      <img src="flyer.jpg" alt="The invitation: a white yacht crossing Biscayne Bay at sunset with the Miami skyline behind, titled Sunset at Sea" width="1200" height="1489" loading="lazy">
-    </figure>
     <figure class="film" style="margin:0">
       <div class="node-head"><span>Film · The keepsake</span><button class="film-play" type="button" aria-label="Play the film full screen with sound">Sound on</button></div>
       <video src="keepsake.mp4" poster="keepsake-poster.jpg" width="1080" height="1350" muted loop playsinline preload="none" aria-label="The keepsake film, 15 seconds: from the invite to the yacht keepsake guests took home. Designed in FLORA."></video>
