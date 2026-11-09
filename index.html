@@ -76,6 +76,14 @@ h1 span{display:block;color:var(--faint)}
 .invite{display:grid;gap:8px;justify-self:end;width:min(100%,300px)}
 .node-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
 .invite img{display:block;width:100%;height:auto;aspect-ratio:1200/1489;border-radius:14px;border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(224,154,143,.35)}
+/* the keepsake film, a video node under the invite (same column, same frame) */
+.nodes{display:grid;gap:22px;justify-self:end;width:min(100%,300px)}
+.nodes .invite{width:100%}
+.film{display:grid;gap:8px}
+.film .node-head{white-space:nowrap}
+.film video{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:14px;border:1px solid var(--line);background:var(--node);box-shadow:0 30px 70px -30px rgba(138,139,179,.35);cursor:pointer}
+.film-play{font:inherit;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);background:none;border:0;padding:0;cursor:pointer}
+.film-play:hover{color:var(--ink)}
 .invite-foot{display:none}
 
 /* live status, the one paper panel */
@@ -201,10 +209,16 @@ a.seg:hover b{text-decoration:underline;text-underline-offset:3px}
       <h1>Sunset at Sea <span>November 10</span></h1>
       <p class="lede">A private yacht evening hosted by <b>FLORA</b>, out of Miami Beach Marina from 5:00 to 7:30 pm. Every photo from the night lives here, in the order the light changed.</p>
     </div>
-    <figure class="invite invite-hero" style="margin:0">
-      <div class="node-head"><span>Image · The invite</span><span>4:5</span></div>
-      <img src="flyer.jpg" alt="The invitation: a white yacht crossing Biscayne Bay at sunset with the Miami skyline behind, titled Sunset at Sea" width="1200" height="1489">
-    </figure>
+    <div class="nodes invite-hero">
+      <figure class="invite" style="margin:0">
+        <div class="node-head"><span>Image · The invite</span><span>4:5</span></div>
+        <img src="flyer.jpg" alt="The invitation: a white yacht crossing Biscayne Bay at sunset with the Miami skyline behind, titled Sunset at Sea" width="1200" height="1489">
+      </figure>
+      <figure class="film" style="margin:0">
+        <div class="node-head"><span>Film · The keepsake</span><button class="film-play" type="button" aria-label="Play the film full screen with sound">Sound on</button></div>
+        <video src="keepsake.mp4" poster="keepsake-poster.jpg" width="1080" height="1350" muted loop playsinline preload="none" aria-label="The keepsake film, 15 seconds: from the invite to the yacht keepsake guests took home. Designed in FLORA."></video>
+      </figure>
+    </div>
   </section>
 
   <section class="status" id="status" aria-live="polite">
@@ -251,10 +265,16 @@ a.seg:hover b{text-decoration:underline;text-underline-offset:3px}
     
   </section>
 
-  <figure class="invite invite-foot" style="margin-inline:0;margin-bottom:0">
-    <div class="node-head"><span>Image · The invite</span><span>4:5</span></div>
-    <img src="flyer.jpg" alt="The invitation: a white yacht crossing Biscayne Bay at sunset with the Miami skyline behind, titled Sunset at Sea" width="1200" height="1489" loading="lazy">
-  </figure>
+  <div class="nodes invite-foot">
+    <figure class="invite" style="margin:0">
+      <div class="node-head"><span>Image · The invite</span><span>4:5</span></div>
+      <img src="flyer.jpg" alt="The invitation: a white yacht crossing Biscayne Bay at sunset with the Miami skyline behind, titled Sunset at Sea" width="1200" height="1489" loading="lazy">
+    </figure>
+    <figure class="film" style="margin:0">
+      <div class="node-head"><span>Film · The keepsake</span><button class="film-play" type="button" aria-label="Play the film full screen with sound">Sound on</button></div>
+      <video src="keepsake.mp4" poster="keepsake-poster.jpg" width="1080" height="1350" muted loop playsinline preload="none" aria-label="The keepsake film, 15 seconds: from the invite to the yacht keepsake guests took home. Designed in FLORA."></video>
+    </figure>
+  </div>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo" hidden>
     <div>
@@ -418,6 +438,29 @@ a.seg:hover b{text-decoration:underline;text-underline-offset:3px}
   drawTicks(DATA.count ? DATA.ticks : []);
   bindShots(); tick();
   setInterval(tick, 20000);
+})();
+
+// the keepsake film: plays muted while on screen; tap it (or "Sound on") for full screen with sound
+(function(){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  [].slice.call(document.querySelectorAll('.film video')).forEach(function(v){
+    function go(p){ if (p && p.catch) p.catch(function(){}); }
+    function withSound(){
+      v.muted = false; v.currentTime = 0; go(v.play());
+      if (v.requestFullscreen) go(v.requestFullscreen());
+      else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+    }
+    function quiet(){ v.muted = true; if (reduce) v.pause(); }
+    v.addEventListener('click', withSound);
+    v.parentNode.querySelector('.film-play').addEventListener('click', withSound);
+    document.addEventListener('fullscreenchange', function(){ if (!document.fullscreenElement) quiet(); });
+    v.addEventListener('webkitendfullscreen', quiet);
+    if (reduce) { v.preload = 'metadata'; return; }
+    if (!('IntersectionObserver' in window)) { v.autoplay = true; return; }
+    new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting) go(v.play()); else if (v.muted) v.pause(); });
+    }, { threshold: 0.35 }).observe(v);
+  });
 })();
 </script>
 </body>
