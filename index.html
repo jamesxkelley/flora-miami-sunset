@@ -218,12 +218,12 @@ a.seg:hover b{text-decoration:underline;text-underline-offset:3px}
 
   <section class="status" id="status" aria-live="polite">
     <div class="st-main">
-      <span class="st-tag" id="stTag"><i></i><span>Sets sail in</span></span>
-      <strong class="st-big" id="stBig">Tue, Nov 10</strong>
+      <span class="st-tag" id="stTag"><i></i><span>Sunset at Sea · Nov 10</span></span>
+      <strong class="st-big is-title" id="stBig">Photos Incoming…</strong>
     </div>
     <div class="st-side">
-      <span class="st-when" id="stWhen">5:00 pm</span>
-      <span class="st-what" id="stWhat">Miami Beach Marina</span>
+      <span class="st-when" id="stWhen">Miami Beach Marina</span>
+      <span class="st-what" id="stWhat">Photos go up after we dock.</span>
     </div>
   </section>
 
@@ -331,14 +331,15 @@ a.seg:hover b{text-decoration:underline;text-underline-offset:3px}
     nowMark.hidden = !live;
     if (live) nowMark.style.left = ((now - START) / (END - START) * 100) + '%';
 
-    if (now < START){
-      set('Sets sail in', span(START - now), false, 'Tue, Nov 10 · 5:00 pm', 'Miami Beach Marina');
-    } else if (live){
-      set('On the water', chapter(now), true,
-        now < SUNSET ? 'Sunset in ' + span(SUNSET - now) : 'Docking at 7:30 pm',
-        'Photos land here after we dock.');
+    // until photos are uploaded, the headline is "Photos Incoming…" (Carson, 2026-11-10); the small lines keep the moment
+    if (!DATA.count && now < START){
+      set('Tonight · Miami Beach Marina', 'Photos Incoming…', true, 'Sets sail in ' + span(START - now), 'Photos go up after we dock.');
+    } else if (!DATA.count && live){
+      set('On the water', 'Photos Incoming…', true,
+        chapter(now) + (now < SUNSET ? ' · sunset in ' + span(SUNSET - now) : ' · docking 7:30 pm'),
+        'Photos go up after we dock.');
     } else if (!DATA.count){
-      set("That's a wrap", 'Photos on the way', true, 'Nov 10 · Miami Beach Marina', 'Check back in a day or two.');
+      set("That's a wrap", 'Photos Incoming…', true, 'Nov 10 · Miami Beach Marina', 'Check back soon.');
     } else {
       var what = document.createElement('span');
       what.textContent = 'Thanks for sailing with us.';
